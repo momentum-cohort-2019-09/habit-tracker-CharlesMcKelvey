@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block script %}<script defer src="{% static 'js/profile.js' %}"></script>{% endblock %}
+{% block content %}
+<div class="top_container">
+    <div>
+        <div><h2>Welcome to your profile, {{request.user}}</h2>
+        <!-- Need to add this as a button that when clicked, presents this form and adds a new habit to the page -->
+        <img onclick="habitPopUp()" class="plus_sign" src="{% static 'img/plus_sign.svg' %}" alt="Plus sign for adding a habit">
+    </div>
+    <canvas id="profileChart" width='300' height="200"></canvas>
+
+        <!-- Will be set to the center of the page when clicked on  -->
+        <div id='habit_form_container'>
+            <form id="habit_form" action="{% url 'add_habit' %}" method="POST">
+                {% csrf_token %}
+                <a class="closing_x" onclick="habitPopUp()">x</a>
+                <h3>Add a new habit!</h3>
+
+                <div class="name_goal">
+                    <div class="name">
+                        <label for="habit_form">Name</label>
+                        {{habit_form.name}}
+                    </div>
+                    <div class="goal">
+                        <label for="habit_form">Goal</label>
+                        {{habit_form.goal}}
+                    </div>
+                </div>
+                <div class="description">
+                    <label for="habit_form">Description</label>
+                    {{habit_form.description}}
+                </div>
+                <div class="adjustment">
+                    <label for="habit_form">Adjustment</label>
+                    {{habit_form.adjustment}}
+                    <label for="habit_form">Frequency</label>
+                    {{habit_form.freq}}
+                </div>
+                <div class="end_date">
+                    <label for="habit_form">End Date</label>
+                    {{habit_form.end_date}}
+                </div>
+                <div>
+                    <button data-user="{{request.user.pk}}" name="habit_form" class="submit_habit" type="submit" value="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div>
+        <canvas width='400' height='275' class="main_graph" alt="Graph of all of the users data"></canvas>
+    </div>
+</div>
+<div class="bottom_container">
+    {{day_sums}}
+    <div class="habit_card_container">
+        {% for habit in habits %}
+        <div class="habit_card habit{{habit.pk}}">
+            <div class="name_graph">
+                <div>
+                    <a href="{% url 'habit' pk=habit.pk %}"><h2 class="habit_name-{{habit.pk}}">{{habit.name}}</h2></a>
+                    <h4 class="habit_goal-{{habit.pk}}">{{habit.goal}}</h4>
+                    <h4 class="habit_description-{{habit.pk}}">{{habit.description}}</h4>
+                </div>
+                <canvas width='400' height='275' class="graph" alt="Graph for {{habit.name}}"></canvas>
+            </div>
+            <div class="edit_and_delete">
+                <button data-habitname="{{habit.name}}" data-habitpk="{{habit.pk}}" type="submit" class="edit_btn">Edit</button>
+                <button data-habitname="{{habit.name}}" data-habitpk="{{habit.pk}}" type="submit" class="delete_btn">Delete</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="">
+
+    </div>
+</div>
+
+<script>
+    // ------------------ CHARTING SECTION ------------------
+    let ctx = document.getElementById('profileChart').getContext('2d');
+    let myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Monday: Sept 7th, 2019', 'Tuesday: Sept 8th, 2019', 'Wednesday: Sept 9th, 2019', 'Thursday: Sept 10th, 2019', 'Friday: Sept 11th, 2019', 'Saturday: Sept 12th, 2019'],
+            datasets: [{
+                label: '# of Votes',
+                data: [9000, 6000, 5000, 7000, 2000, 5500],
+            }, {
+                label: '# of {{day_sums.}}',
+                data: [/* Total sum per day here */ 1600, 4000, 7285, 1800, 2600, 4000],
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+{% endblock %}

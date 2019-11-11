@@ -4,13 +4,15 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-yapf = "*"
-prospector = "*"
+pylint = "*"
+autopep8 = "*"
 
 [packages]
-django = ">=2.2"
-django-debug-toolbar = "*"
+django = "*"
+djangorestframework = "*"
 django-registration-redux = "*"
+django-extensions = "*"
+django-debug-toolbar = "*"
 
 [requires]
 python_version = "3.7"

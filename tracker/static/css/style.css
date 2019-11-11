@@ -1,0 +1,179 @@
+/* ------------------  GENERAL  ------------------ */
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: content-box;
+}
+
+a {
+	text-decoration: none;
+}
+
+body {
+	width: 90%;
+	margin: 0 auto;
+	background-color: #efefef;
+	margin-bottom: 3rem;
+}
+
+ul {
+	display: flex;
+	justify-content: space-between;
+	font-size: 28px;
+}
+
+ul div {
+	margin: .25rem 3rem;
+}
+
+header {
+	border-bottom: 1px dotted black;
+}
+/* ---------------- ICONS ---------------- */
+.plus_sign {
+	width: 1.5rem;
+}
+
+.plus_sign:hover {
+	cursor: pointer;
+}
+
+/* ------------------ PROFILE PAGE ------------------ */
+
+#habit_form_container {
+	display: none;
+}
+
+#habit_form {
+	display: flex;
+	flex-direction: column;
+	width: 50%;
+	height: 40%;
+	margin-left: 3rem;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	box-shadow: 1px 1px 3px;
+	background-color: #c2d9f7;
+	padding: 3rem;
+}
+
+.closing_x,
+.edit_closing_x {
+	display: flex;
+	cursor: pointer;
+	width: fit-content;
+	align-self: flex-end;
+	font-size: 30px;
+}
+
+.name_goal {
+	display: flex;
+	justify-content: space-between;
+}
+
+.name,
+.goal {
+	display: flex;
+	flex-direction: column;
+}
+
+.habit_form_btm {
+	display: flex;
+}
+
+.habit_card_container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#edit_form {
+	display: flex;
+	flex-direction: column;
+	width: 50%;
+	height: 40%;
+	margin-left: 3rem;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	box-shadow: 1px 1px 3px;
+	background-color: #c2d9f7;
+	padding: 3rem;
+}
+
+/* ----------- Habit Card Information ------------ */
+
+.habit_card {
+	border-radius: 15px;
+	margin: .7rem;
+	padding: .6rem;
+	/* width: 300px;
+	height: 150px; */
+	background-color: #c2d9f7;
+	box-shadow: 1px 1px 3.25px #acc9ee;
+	transition: .5s linear;
+	display: flex;
+	flex-direction: column;
+	align-content: flex-end;
+}
+
+.habit_card:hover {
+	transform: scale(1.05);
+	opacity: .95;
+}
+
+.name_graph {
+	display: flex;
+	justify-content: space-between;
+}
+
+.edit_and_delete {
+	display: flex;
+	justify-content: space-between;
+	vertical-align: bottom;
+}
+
+/* ------------------ HABIT PAGE ------------------ */
+.top_container {
+	display: flex;
+	justify-content: space-between;
+	margin: 1rem 0;
+}
+
+.bottom_container {
+	border-top: 1px solid black;
+	display: flex;
+	justify-content: space-between;
+}
+
+.history_and_add_record {
+	display: flex;
+	margin: auto 0;
+	margin-top: 1rem;
+}
+
+.history_and_add_record h2,
+form {
+	margin: auto 1.25rem;
+	padding-left: .5rem;
+
+	text-align: center;
+}
+
+.history_container {
+	width: 70%;
+}
+
+.filter_container {
+	width: 20%;
+}
+
+.record_span {
+	background-color: rgb(201, 217, 233);
+	border-radius: 3px;
+	box-shadow: 1px 1px 3.75px;
+	margin: 1rem;
+	padding: .75rem;
+}
