@@ -30,7 +30,8 @@ class RecordForm(forms.ModelForm):
         model = Record
         fields = [
             'amount',
-            'description'
+            'description',
+            'created_at',
         ]
 
 

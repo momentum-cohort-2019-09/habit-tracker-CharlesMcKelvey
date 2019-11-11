@@ -47,27 +47,21 @@
                 </div>
             </form>
         </div>
-
-    </div>
-    <div>
-        <canvas width='400' height='275' class="main_graph" alt="Graph of all of the users data"></canvas>
     </div>
 </div>
 <div class="bottom_container">
-    {{day_sums}}
     <div class="habit_card_container">
         {% for habit in habits %}
-        <div class="habit_card habit{{habit.pk}}">
+        <div class="habit_card" id="habit-{{habit.pk}}">
             <div class="name_graph">
                 <div>
                     <a href="{% url 'habit' pk=habit.pk %}"><h2 class="habit_name-{{habit.pk}}">{{habit.name}}</h2></a>
                     <h4 class="habit_goal-{{habit.pk}}">{{habit.goal}}</h4>
                     <h4 class="habit_description-{{habit.pk}}">{{habit.description}}</h4>
                 </div>
-                <canvas width='400' height='275' class="graph" alt="Graph for {{habit.name}}"></canvas>
             </div>
             <div class="edit_and_delete">
-                <button data-habitname="{{habit.name}}" data-habitpk="{{habit.pk}}" type="submit" class="edit_btn">Edit</button>
+                <a data-habitname="{{habit.name}}" data-habitpk="{{habit.pk}}" type="submit" class="edit_btn" href="{% url 'edit_habit' pk=habit.pk %}">Edit</a>
                 <button data-habitname="{{habit.name}}" data-habitpk="{{habit.pk}}" type="submit" class="delete_btn">Delete</button>
             </div>
         </div>
@@ -78,30 +72,4 @@
     </div>
 </div>
 
-<script>
-    // ------------------ CHARTING SECTION ------------------
-    let ctx = document.getElementById('profileChart').getContext('2d');
-    let myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Monday: Sept 7th, 2019', 'Tuesday: Sept 8th, 2019', 'Wednesday: Sept 9th, 2019', 'Thursday: Sept 10th, 2019', 'Friday: Sept 11th, 2019', 'Saturday: Sept 12th, 2019'],
-            datasets: [{
-                label: '# of Votes',
-                data: [9000, 6000, 5000, 7000, 2000, 5500],
-            }, {
-                label: '# of {{day_sums.}}',
-                data: [/* Total sum per day here */ 1600, 4000, 7285, 1800, 2600, 4000],
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-</script>
 {% endblock %}

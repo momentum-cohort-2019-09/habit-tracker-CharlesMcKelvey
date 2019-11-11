@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from tracker.forms import HabitForm, RecordForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
 
 # ---------------- General Pages ----------------
 
@@ -20,6 +21,7 @@ def profile(request, pk):
     # Should
     habits = Habit.objects.filter(tracker=User.objects.get(pk=pk))
     day_sums = []
+    labels = []
     for habit in habits:
         records = Record.objects.filter(habit=habit)
         if len(records) == 0:
@@ -51,8 +53,41 @@ def habit(request, pk):
     # Aggregate data to display a graph appropriately
     habit = get_object_or_404(Habit, pk=pk)
     records = Record.objects.filter(habit=habit)
+
+    dates = []
+    dataset = []
+    labels = []
+
+    for record in records:
+        if record.created_at not in dates:
+            dates.append(record.created_at)
+
+    for record in records:
+        if record.created_at in dates and labels.count(record.created_at.strftime("%b %d, %Y")) == 0:
+            label = record.created_at.strftime('%b %d, %Y')
+            labels.append(label)
+    date_records = []
+    count = 0
+    for date in dates:
+        date_record = {}
+        summ = 0
+        day = records.filter(created_at=date)
+        for record in day:
+            summ += record.amount
+        dataset.append(summ)
+        date_record[labels[count]] = day
+        count += 1
+        date_records.append(date_record)
+
+        # Because the information comes in with the most recent being the top, we reverse both so the data is represented properly
+        # Reasoning: We are looking at when the record was created, not updated
+    labels.reverse()
+    dataset.reverse()
+    print(labels)
+    print(date_records)
+
     record_form = RecordForm(instance=request.user)
-    return render(request, 'habit.html', {'habit': habit, 'records': records, 'record_form': record_form})
+    return render(request, 'habit.html', {'habit': habit, 'records': records, 'record_form': record_form, 'Chart_labels': labels, 'Chart_dataset': dataset})
 
 # ---------------- Habit Related ----------------
 @login_required
@@ -80,9 +115,21 @@ def edit_habit(request, pk):
 
     # Pull up the habit, and with the request,
     if request.method == 'POST':
-        # Overwrite the information
-        habit = request.data
+        habit_form = HabitForm(request.POST)
+        print(habit_form)
+        if habit_form.is_valid():
+            habit.goal = request.POST.get('goal')
+            habit.description = request.POST.get('description')
+            habit.name = request.POST.get('name')
+            habit.amount = request.POST.get('amount')
+            habit.freq = request.POST.get('freq')
+            habit.adjustment = request.POST.get('adjustment')
+            habit.save()
+            return redirect('profile', pk=habit.tracker.pk)
         # This may not be needed as I don't think I would ever load just one record
+    else:
+        habbit_form = HabitForm(instance=request.user)
+        return render(request, 'edit_habit.html', {'habit': habit, 'form': habbit_form})
 
 
 @csrf_exempt
@@ -90,6 +137,8 @@ def delete_habit(request, pk):
     habit = get_object_or_404(Habit, pk=pk)
     habit.delete()
     return JsonResponse({'ok': True})
+
+# --------------- RECORD RELATED ------------------
 
 
 def add_record(request, pk):
@@ -106,9 +155,22 @@ def add_record(request, pk):
         return redirect('habit', pk=pk)
 
 
+@csrf_exempt
 def delete_record(request, pk):
     record = get_object_or_404(Record, pk=pk)
+    record.delete()
+    return JsonResponse({'ok': True})
 
 
+@login_required
+@csrf_exempt
 def edit_record(request, pk):
     record = get_object_or_404(Record, pk=pk)
+    record_form = RecordForm(data=request.POST)
+    if record_form.is_valid():
+        record = record_form.save()
+        # Returning the form so we can populate the now updated record with the new information
+        # Doing a check in the terminal to see if this is returning the given information when doing certain calls
+        return JsonResponse({'ok': True, 'data': record})
+    else:
+        return JsonResponse({'ok': False})

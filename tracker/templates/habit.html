@@ -8,7 +8,6 @@
         <h2>Here is your {{habit.name}} habit</h2>
         <p>Description: {{habit.description}}</p>
     </div>
-    <img src="" alt="Graph">
 </div>
 
 <div class="bottom_container">
@@ -22,16 +21,22 @@
                 <button type="submit">Submit</button>
             </form>
         </div>
-
-        {% for record in records %}
-            <div class="record_span">
-                {{record.amount}}
-                {{record.description}}
-                {{record.created_at}}
-                <a href="{% url 'edit_record' pk={{record.pk}}">Edit</a>
-                <a href="{% url 'delete_record' pk={{record.pk}}">Delete</a>
-            </div>
-        {% endfor %}
+            {% for record in records %}
+                <div class="record_span" id="record-{{record.pk}}">
+                    <p id="record_amount_{{record.pk}}">{{record.amount}}</p>
+                    <p id="record_description_{{record.pk}}">{{record.description}}</p>
+                    <p>{{record.created_at}}</p>
+                    <a data-recordpk="{{record.pk}}" data-habitpk="{{record.habit.pk}}" class="edit_record" href="{% url 'edit_record' pk=record.pk %}">Edit</a>
+                    <a data-recordpk="{{record.pk}}" class="delete_record" href="">Delete</a>
+                </div>
+                <form style="display: none;"action="{% url 'edit_record' pk=record.pk %}" class="edit_record_form_{{record.pk}} record_span" method="POST" id="record-{{record.pk}}">
+                    <label for="record_form">Amount</label>
+                    <input id="record_amount_{{record.pk}}" value="{{record.amount}}">
+                    <label for="record_form">Description</label>
+                    <textarea cols="50" rows="10" id="record_description_{{record.pk}}">{{record.description}}</textarea>
+                    <button id="submit_record_{{record.pk}}" name="record_form" type="submit">Submit</button>
+                </form>
+            {% endfor %}
     </div>
 
     <div class="filter_container">
@@ -43,4 +48,30 @@
     </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script>
+    // ------------------ CHARTING SECTION ------------------
+    let ctx = document.getElementById('habit_chart').getContext('2d');
+    let myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{Chart_labels}},
+            datasets:
+                [{
+                    label: '{{habit.name}}',
+                    data: {{Chart_dataset}},
+                }],
+        },
+
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
 {% endblock %}

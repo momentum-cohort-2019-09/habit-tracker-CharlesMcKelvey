@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<a href="{% url 'profile' pk=habit.tracker.pk %}">Go Back!</a>
+<div>
+    <h2>Goal you're editing</h2>
+    <p>{{habit.name}}</p>
+    <p>{{habit.description}}</p>
+    <p>{{habit.goal}}</p>
+    <p>{{habit.freq}}</p>
+    <p>{{habit.adjusment}}</p>
+    <p>{{habit.end_date}}</p>
+</div>
+<form action="" method='POST'>
+    {% csrf_token %}
+    {{form.as_p}}
+    <button class="edit_submit" type="submit">Save Edit</button>
+</form>
+
+{% endblock %}
