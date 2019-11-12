@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<a href="{% url 'habit' pk=record.habit.pk %}">Go Back!</a>
+<div>
+    <h2>Goal you're editing</h2>
+    <p>{{record.amount}}</p>
+    <p>{{record.description}}</p>
+    <p>{{record.end_date}}</p>
+</div>
+<form action="" method='POST'>
+    {% csrf_token %}
+    {{record_form.as_p}}
+    <button class="edit_submit" type="submit">Save Edit</button>
+</form>
+
+{% endblock %}

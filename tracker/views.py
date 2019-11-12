@@ -85,6 +85,7 @@ def habit(request, pk):
     dataset.reverse()
     print(labels)
     print(date_records)
+    print('Goal for the given habit: ', habit.goal)
 
     record_form = RecordForm(instance=request.user)
     return render(request, 'habit.html', {'habit': habit, 'records': records, 'record_form': record_form, 'Chart_labels': labels, 'Chart_dataset': dataset})
@@ -115,21 +116,14 @@ def edit_habit(request, pk):
 
     # Pull up the habit, and with the request,
     if request.method == 'POST':
-        habit_form = HabitForm(request.POST)
-        print(habit_form)
+        habit_form = HabitForm(data=request.POST, instance=habit)
         if habit_form.is_valid():
-            habit.goal = request.POST.get('goal')
-            habit.description = request.POST.get('description')
-            habit.name = request.POST.get('name')
-            habit.amount = request.POST.get('amount')
-            habit.freq = request.POST.get('freq')
-            habit.adjustment = request.POST.get('adjustment')
-            habit.save()
+            habit_form.save()
             return redirect('profile', pk=habit.tracker.pk)
         # This may not be needed as I don't think I would ever load just one record
     else:
-        habbit_form = HabitForm(instance=request.user)
-        return render(request, 'edit_habit.html', {'habit': habit, 'form': habbit_form})
+        habit_form = HabitForm(instance=habit)
+        return render(request, 'edit_habit.html', {'habit': habit, 'form': habit_form})
 
 
 @csrf_exempt
@@ -166,11 +160,16 @@ def delete_record(request, pk):
 @csrf_exempt
 def edit_record(request, pk):
     record = get_object_or_404(Record, pk=pk)
-    record_form = RecordForm(data=request.POST)
-    if record_form.is_valid():
-        record = record_form.save()
-        # Returning the form so we can populate the now updated record with the new information
-        # Doing a check in the terminal to see if this is returning the given information when doing certain calls
-        return JsonResponse({'ok': True, 'data': record})
+    if request.method == 'POST':
+        record_form = RecordForm(request.POST)
+        if record_form.is_valid():
+            record.amount = request.POST.get('amount')
+            record.description = request.POST.get('description')
+            record.created_at = request.POST.get('created_at')
+            record.save()
+            # Returning the form so we can populate the now updated record with the new information
+            # Doing a check in the terminal to see if this is returning the given information when doing certain calls
+            return redirect('habit', pk=record.habit.pk)
     else:
-        return JsonResponse({'ok': False})
+        record_form = RecordForm(instance=request.user)
+        return render(request, 'edit_record.html', {'record': record, 'record_form': record_form})

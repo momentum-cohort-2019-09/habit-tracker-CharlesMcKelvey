@@ -10,6 +10,8 @@
     </div>
 </div>
 
+<canvas id="habit_chart" width="300" height="225"></canvas>
+
 <div class="bottom_container">
     <div class="history_container">
 
@@ -29,13 +31,6 @@
                     <a data-recordpk="{{record.pk}}" data-habitpk="{{record.habit.pk}}" class="edit_record" href="{% url 'edit_record' pk=record.pk %}">Edit</a>
                     <a data-recordpk="{{record.pk}}" class="delete_record" href="">Delete</a>
                 </div>
-                <form style="display: none;"action="{% url 'edit_record' pk=record.pk %}" class="edit_record_form_{{record.pk}} record_span" method="POST" id="record-{{record.pk}}">
-                    <label for="record_form">Amount</label>
-                    <input id="record_amount_{{record.pk}}" value="{{record.amount}}">
-                    <label for="record_form">Description</label>
-                    <textarea cols="50" rows="10" id="record_description_{{record.pk}}">{{record.description}}</textarea>
-                    <button id="submit_record_{{record.pk}}" name="record_form" type="submit">Submit</button>
-                </form>
             {% endfor %}
     </div>
 
@@ -49,13 +44,14 @@
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+{{ Chart_labels|json_script:"labels" }}
 <script>
     // ------------------ CHARTING SECTION ------------------
     let ctx = document.getElementById('habit_chart').getContext('2d');
     let myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {{Chart_labels}},
+            labels: JSON.parse(document.getElementById('labels').innerText),
             datasets:
                 [{
                     label: '{{habit.name}}',
