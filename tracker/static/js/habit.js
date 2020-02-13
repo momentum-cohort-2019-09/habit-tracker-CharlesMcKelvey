@@ -11,11 +11,11 @@ for (let delete_button of delete_buttons) {
                 .then(data => {
                     if (data.ok) {
                         alert('Record successfully deleted')
+                        document.querySelector(`#record-${delete_button.dataset.recordpk}`).style.display = 'none';
                     } else {
                         alert('For some reason, record could not be deleted.')
                     }
                 })
-            document.querySelector(`#record-${delete_button.dataset.recordpk}`).style.display = 'none';
         }
     })
 }

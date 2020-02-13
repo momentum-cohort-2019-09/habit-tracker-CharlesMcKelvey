@@ -81,8 +81,6 @@ def habit(request, pk):
 
         # Because the information comes in with the most recent being the top, we reverse both so the data is represented properly
         # Reasoning: We are looking at when the record was created, not updated
-    labels.reverse()
-    dataset.reverse()
     print(labels)
     print(date_records)
     print('Goal for the given habit: ', habit.goal)
@@ -160,16 +158,14 @@ def delete_record(request, pk):
 @csrf_exempt
 def edit_record(request, pk):
     record = get_object_or_404(Record, pk=pk)
+
     if request.method == 'POST':
-        record_form = RecordForm(request.POST)
+        record_form = RecordForm(data=request.POST, instance=record)
         if record_form.is_valid():
-            record.amount = request.POST.get('amount')
-            record.description = request.POST.get('description')
-            record.created_at = request.POST.get('created_at')
-            record.save()
+            record_form.save()
             # Returning the form so we can populate the now updated record with the new information
             # Doing a check in the terminal to see if this is returning the given information when doing certain calls
             return redirect('habit', pk=record.habit.pk)
     else:
-        record_form = RecordForm(instance=request.user)
+        record_form = RecordForm(instance=record)
         return render(request, 'edit_record.html', {'record': record, 'record_form': record_form})

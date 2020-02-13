@@ -9,30 +9,23 @@
     <div>
         <div class="slideshow_container">
             <div class="slide">
-                <q>This really set my life up for success!</q>
-                <p class="author">Sumgui</p>
+                <img class="images" src="{% static 'img/isle.jpeg' %}" alt="Beautiful bird's eye view of a isle somewhere. Rich blues and greens">
+                <p class="author">NASA</p>
             </div>
             <div class="slide">
-                <q>I've never felt more alive!</q>
-                <p class="author">OLivingItUp</p>
+                <img class="images" src="{% static 'img/blue_ice.jpeg' %}" alt="">
+                <p class="author">Daniele Levis Pelusi</p>
             </div>
             <div class="slide">
-                <q>The charts really help</q>
-                <p class="author">ChartGuy</p>
+                <img class="images" src="{% static 'img/stormy_waters.jpeg' %}" alt="">
+                <p class="author">Michael Benz</p>
             </div>
-            <a class="prev" onclick="plusSlides(-1)">❮</a>
-            <a class="next" onclick="plusSlides(1)">❯</a>
-        </div>
-        <div class="dot-container">
-            <span class="dot" onclick="currentSlide(1)"></span>
-            <span class="dot" onclick="currentSlide(2)"></span>
-            <span class="dot" onclick="currentSlide(3)"></span>
         </div>
     </div>
     <div class="example_container">
         <div class="top_example">
-            <img class="images" src="{% static 'img/goals.jpeg' %}" alt="Profile screenshot of how the organization works and what to expect">
-            <p class="talk">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give
+            <img  data-aos="fade-right" data-aos-duration="1000" class="images" src="{% static 'img/goals.jpeg' %}" alt="Profile screenshot of how the organization works and what to expect">
+            <p data-aos="fade-left" data-aos-duration="1000" class="talk">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give
             you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the
             master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but
             because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor
@@ -43,7 +36,7 @@
             that produces no resultant pleasure?</p>
         </div>
         <div class="bottom_example">
-            <p class="talk">On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the
+            <p data-aos="fade-right" data-aos-duration="1000" class="talk">On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the
             charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to
             ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying
             through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our
@@ -52,7 +45,7 @@
             business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore
             always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or
             else he endures pains to avoid worse pains.</p>
-            <img class="images" src="{% static 'img/sample_chart.png' %}" alt="Habit chart displayed when going to a specific habit">
+            <img data-aos="fade-left" data-aos-duration="1000" class="images" src="{% static 'img/sample_chart.png' %}" alt="Habit chart displayed when going to a specific habit">
         </div>
     </div>
 <!-- 
